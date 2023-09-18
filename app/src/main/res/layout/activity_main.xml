@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/primaryView"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:id="@+id/loadingView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/purple_700"
+                android:indeterminateTintMode="src_atop"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Loading..."
+                android:textColor="@color/black"
+                android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/errorView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/errorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Error"
+                android:textColor="@color/black"
+                android:textSize="12sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/paymentsView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="20sp"
+            android:gravity="center">
+            <Button
+                android:id="@+id/connectViaBluetoothBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Connect Via Bluetooth"/>
+            <Button
+                android:id="@+id/connectedDevicesBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Get Connected Devices"/>
+            <Button
+                android:id="@+id/deviceConnectionBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Device Connection"/>
+            <EditText
+                android:id="@+id/amountText"
+                android:inputType="numberDecimal"
+                android:paddingTop="50sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Amount"/>
+            <Button
+                android:id="@+id/payBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pay"/>
+            <Button
+                android:id="@+id/configsBtn"
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Configs"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
