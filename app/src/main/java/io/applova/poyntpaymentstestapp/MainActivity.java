@@ -30,14 +30,16 @@ import com.godaddy.payments.sdk.device.listeners.ScanResult;
 import com.godaddy.payments.sdk.models.Credentials;
 import com.godaddy.payments.sdk.models.InitListener;
 import com.godaddy.payments.sdk.models.PoskitError;
+import com.godaddy.payments.sdk.models.payment.PaymentMethod;
+import com.godaddy.payments.sdk.models.payment.PaymentRequest;
 import com.godaddy.payments.sdk.models.payment.TransactionEvent;
 import com.godaddy.payments.sdk.models.payment.TransactionResult;
 import com.godaddy.payments.sdk.payment.listeners.TransactionStatusListener;
+import com.google.gson.Gson;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import co.poynt.os.model.Payment;
 import io.applova.poyntpaymentstestapp.adapter.ItemAdapter;
 import io.applova.poyntpaymentstestapp.databinding.ActivityMainBinding;
 
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private Dialog dialog;
+    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,6 +279,14 @@ public class MainActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private void hideButtonsOnPay(boolean isPaying) {
+        if (isPaying) {
+            binding.paymentsView.setVisibility(View.GONE);
+        } else {
+            binding.paymentsView.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void setButtonActions() {
         binding.configsBtn.setOnClickListener(v -> launchConfigsDialog(false));
         binding.connectedDevicesBtn.setOnClickListener(v -> {
@@ -318,23 +329,29 @@ public class MainActivity extends AppCompatActivity {
         binding.deviceConnectionBtn.setOnClickListener(v -> paymentsSdk.deviceInterface().launchDeviceConnection());
 
         binding.payBtn.setOnClickListener(view -> {
+            hideButtonsOnPay(true);
             String amount = binding.amountText.getText().toString();
 
-            Payment payment = new Payment();
-            payment.setAmount(new BigDecimal(amount).longValue());
-            payment.setCurrency("USD");
-            payment.setCaptureWithCard(true);
-            payment.setDisableCash(true);
-            payment.setDisableTip(true);
-            payment.setSkipReceiptScreen(true);
-            payment.setSkipSignatureScreen(true);
-            payment.setManualEntry(true);
+//            Payment payment = new Payment();
+//            payment.setAmount(new BigDecimal(amount).longValue());
+//            payment.setCurrency("USD");
+//            payment.setCaptureWithCard(true);
+//            payment.setDisableCash(true);
+//            payment.setDisableTip(true);
+//            payment.setSkipReceiptScreen(true);
+//            payment.setSkipSignatureScreen(true);
+//            payment.setManualEntry(true);
 
-            paymentsSdk.transactionInterface().processTransaction(payment, new TransactionStatusListener() {
+            long paymentAmount = new BigDecimal(amount).longValue();
+            long tipAmount = new BigDecimal(0).longValue();
+            PaymentRequest paymentRequest = new PaymentRequest(paymentAmount, tipAmount, PaymentMethod.LCR);
+            paymentsSdk.transactionInterface().processTransaction(paymentRequest, new TransactionStatusListener() {
                 @Override
                 public void onResult(@NonNull TransactionResult transactionResult) {
                     Toast.makeText(context, "Transaction Success!", Toast.LENGTH_LONG).show();
                     Log.i(TAG, "onResult: " + transactionResult.toString());
+                    Log.i(TAG, "onResult: " + gson.toJson(transactionResult));
+                    hideButtonsOnPay(false);
                 }
 
                 @Override
@@ -345,11 +362,13 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onError(@NonNull PoskitError poskitError) {
                     Toast.makeText(context, "Transaction Error: " + poskitError.getMessage(), Toast.LENGTH_LONG).show();
+                    hideButtonsOnPay(false);
                 }
 
                 @Override
                 public void onCancel() {
                     Toast.makeText(context, "Transaction Cancelled", Toast.LENGTH_LONG).show();
+                    hideButtonsOnPay(false);
                 }
             });
         });
