@@ -58,16 +58,86 @@
             android:orientation="vertical"
             android:padding="20sp"
             android:gravity="center">
-            <Button
-                android:id="@+id/connectViaBluetoothBtn"
+            <LinearLayout
+                android:id="@+id/connectedDeviceDetailsWrapper"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Connect Via Bluetooth"/>
-            <Button
-                android:id="@+id/connectedDevicesBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Get Connected Devices"/>
+                android:orientation="vertical"
+                android:visibility="gone">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Device Name: "
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/deviceName"
+                        android:text="N/A"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Device Serial: "
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/deviceSerial"
+                        android:text="N/A"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Device Battery: "
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/deviceBattery"
+                        android:text="N/A"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Device Charging Status: "
+                        android:textSize="12sp"/>
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/deviceChargingStatus"
+                        android:text="N/A"
+                        android:textSize="12sp"/>
+                </LinearLayout>
+            </LinearLayout>
             <Button
                 android:id="@+id/deviceConnectionBtn"
                 android:layout_width="match_parent"

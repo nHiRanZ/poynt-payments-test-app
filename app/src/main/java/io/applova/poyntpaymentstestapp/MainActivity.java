@@ -26,6 +26,7 @@ import com.godaddy.payments.sdk.PaymentsSdk;
 import com.godaddy.payments.sdk.common.cancellable.Cancellable;
 import com.godaddy.payments.sdk.device.PosDevice;
 import com.godaddy.payments.sdk.device.listeners.DeviceConnectionListener;
+import com.godaddy.payments.sdk.device.listeners.DeviceUpdateListener;
 import com.godaddy.payments.sdk.device.listeners.ScanResult;
 import com.godaddy.payments.sdk.models.Credentials;
 import com.godaddy.payments.sdk.models.InitListener;
@@ -289,43 +290,37 @@ public class MainActivity extends AppCompatActivity {
 
     private void setButtonActions() {
         binding.configsBtn.setOnClickListener(v -> launchConfigsDialog(false));
-        binding.connectedDevicesBtn.setOnClickListener(v -> {
-            List<PosDevice> posDevices = paymentsSdk.deviceInterface().connectedDevices();
-            if (posDevices != null && !posDevices.isEmpty()) {
-                showDialogWithRecycleView(context, posDevices, true);
-            } else {
-                Toast.makeText(context, "No connected devices", Toast.LENGTH_LONG).show();
+
+        paymentsSdk.deviceInterface().registerDeviceConnectionListener(new DeviceConnectionListener() {
+            @Override
+            public void onConnected(@NonNull PosDevice posDevice) {
+                binding.deviceName.setText(posDevice.name());
+                binding.deviceChargingStatus.setText(posDevice.isCharging() ? "Charging" : "Not Charging");
+                binding.deviceBattery.setText(posDevice.batteryPercentage() + "%");
+                binding.deviceSerial.setText(posDevice.serialNumber());
+                binding.connectedDeviceDetailsWrapper.setVisibility(View.VISIBLE);
+                binding.deviceConnectionBtn.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onDisconnected() {
+                binding.connectedDeviceDetailsWrapper.setVisibility(View.GONE);
+                binding.deviceConnectionBtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onError(@NonNull PoskitError poskitError) {
+                binding.connectedDeviceDetailsWrapper.setVisibility(View.GONE);
+                binding.deviceConnectionBtn.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onUsbConnected(@NonNull PosDevice posDevice) {
+                binding.connectedDeviceDetailsWrapper.setVisibility(View.GONE);
+                binding.deviceConnectionBtn.setVisibility(View.VISIBLE);
             }
         });
-        binding.connectViaBluetoothBtn.setOnClickListener(v -> {
-                    showDialogWithRecycleViewLoading(context);
-                    Cancellable cancellable = paymentsSdk.deviceInterface().discoverAvailableDevices(new ScanResult() {
-                        @Override
-                        public void onResult(@NonNull List<? extends PosDevice> list) {
-                            Log.i(TAG, "onResult: " + list.size());
-                            showDialogWithRecycleView(context, list, true);
-                        }
 
-                        @Override
-                        public void onError(@NonNull PoskitError poskitError) {
-                            Toast.makeText(context, "Error: " + poskitError.getMessage(), Toast.LENGTH_LONG).show();
-                            dismissDialog();
-                        }
-
-                        @Override
-                        public void onScanStopped() {
-                            Toast.makeText(context, "Scan Stopped", Toast.LENGTH_LONG).show();
-                            dismissDialog();
-                        }
-
-                        @Override
-                        public void onScanTimeout() {
-                            Toast.makeText(context, "Scan Timeout", Toast.LENGTH_LONG).show();
-                            dismissDialog();
-                        }
-                    });
-                }
-        );
         binding.deviceConnectionBtn.setOnClickListener(v -> paymentsSdk.deviceInterface().launchDeviceConnection());
 
         binding.payBtn.setOnClickListener(view -> {
