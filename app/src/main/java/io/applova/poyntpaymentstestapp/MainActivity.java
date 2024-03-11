@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity {
         binding.payBtn.setOnClickListener(view -> {
             hideButtonsOnPay(true);
             String amount = binding.amountText.getText().toString();
+            String tipAmount = binding.tipAmountText.getText().toString();
 
 //            Payment payment = new Payment();
 //            payment.setAmount(new BigDecimal(amount).longValue());
@@ -338,8 +339,11 @@ public class MainActivity extends AppCompatActivity {
 //            payment.setManualEntry(true);
 
             long paymentAmount = new BigDecimal(amount).longValue();
-            long tipAmount = new BigDecimal(0).longValue();
-            PaymentRequest paymentRequest = new PaymentRequest(paymentAmount, tipAmount, PaymentMethod.LCR);
+            long paymentTipAmount = new BigDecimal(0).longValue();
+            if (!tipAmount.isEmpty()) {
+                paymentTipAmount = new BigDecimal(tipAmount).longValue();
+            }
+            PaymentRequest paymentRequest = new PaymentRequest(paymentAmount, paymentTipAmount, PaymentMethod.LCR);
             paymentsSdk.transactionInterface().processTransaction(paymentRequest, new TransactionStatusListener() {
                 @Override
                 public void onResult(@NonNull TransactionResult transactionResult) {

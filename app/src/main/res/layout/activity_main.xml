@@ -150,6 +150,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter Amount"/>
+            <EditText
+                android:id="@+id/tipAmountText"
+                android:inputType="numberDecimal"
+                android:paddingTop="50sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Tip Amount"/>
             <Button
                 android:id="@+id/payBtn"
                 android:layout_width="match_parent"
